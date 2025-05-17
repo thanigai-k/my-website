@@ -1,15 +1,15 @@
-import path from 'node:path';
-import { getMDXData } from '../utils';
+import path from "node:path";
+import { getMDXData } from "../utils";
 
 // Get all blog posts
 export function getBlogPosts() {
-  return getMDXData(path.join(process.cwd(), 'app', 'blog', 'posts'));
+  return getMDXData(path.join(process.cwd(), "app", "blog", "posts"));
 }
 
 export function formatDate(date: string, includeRelative = false) {
   const currentDate = new Date();
 
-  const normalisedDate = date.includes('T') ? date : `${date}T00:00:00`;
+  const normalisedDate = date.includes("T") ? date : `${date}T00:00:00`;
 
   const targetDate = new Date(normalisedDate);
 
@@ -17,7 +17,7 @@ export function formatDate(date: string, includeRelative = false) {
   const monthsAgo = currentDate.getMonth() - targetDate.getMonth();
   const daysAgo = currentDate.getDate() - targetDate.getDate();
 
-  let formattedDate = '';
+  let formattedDate = "";
 
   if (yearsAgo > 0) {
     formattedDate = `${yearsAgo}y ago`;
@@ -26,13 +26,13 @@ export function formatDate(date: string, includeRelative = false) {
   } else if (daysAgo > 0) {
     formattedDate = `${daysAgo}d ago`;
   } else {
-    formattedDate = 'Today';
+    formattedDate = "Today";
   }
 
-  const fullDate = targetDate.toLocaleString('en-us', {
-    month: 'long',
-    day: 'numeric',
-    year: 'numeric',
+  const fullDate = targetDate.toLocaleString("en-us", {
+    month: "long",
+    day: "numeric",
+    year: "numeric",
   });
 
   if (!includeRelative) {
@@ -47,7 +47,7 @@ export function formatDate(date: string, includeRelative = false) {
  *
  * */
 export function getBlogPostByFilter({
-  type = 'desc',
+  type = "desc",
   limit = 5,
 }: {
   /**
@@ -55,7 +55,7 @@ export function getBlogPostByFilter({
    *
    * @default "desc"
    * */
-  type?: 'asc' | 'desc';
+  type?: "asc" | "desc";
   /**
    * Limit number of posts
    *
@@ -69,7 +69,7 @@ export function getBlogPostByFilter({
     const dateA = new Date(a.metadata.publishedAt).getTime();
     const dateB = new Date(b.metadata.publishedAt).getTime();
 
-    return type === 'asc' ? dateA - dateB : dateB - dateA;
+    return type === "asc" ? dateA - dateB : dateB - dateA;
   });
 
   if (limit) {

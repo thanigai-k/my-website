@@ -1,9 +1,9 @@
-import { BlogPosts } from 'app/components/posts';
-import Link from 'next/link';
-import { ArrowIcon } from './components/ArrowIcon';
-import { ArrowRightIcon } from '@heroicons/react/24/outline';
-import { getBlogPostByFilter, getBlogPosts } from './blog/utils';
-import { WORK_EXPERIENCE_CONTENT } from './content';
+import { BlogPosts } from "app/components/posts";
+import Link from "next/link";
+import { ArrowIcon } from "./components/ArrowIcon";
+import { ArrowRightIcon } from "@heroicons/react/24/outline";
+import { getBlogPostByFilter, getBlogPosts } from "./blog/utils";
+import { WORK_EXPERIENCE_CONTENT } from "./content";
 
 export default function Page() {
   const recentPosts = getBlogPostByFilter({

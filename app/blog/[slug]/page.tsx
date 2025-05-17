@@ -1,9 +1,9 @@
-import { notFound } from 'next/navigation';
-import { CustomMDX } from 'app/components/mdx';
-import { formatDate, getBlogPosts } from 'app/blog/utils';
-import { baseUrl } from 'app/sitemap';
-import { ChevronLeftIcon } from '@heroicons/react/24/outline';
-import Link from 'next/link';
+import { notFound } from "next/navigation";
+import { CustomMDX } from "app/components/mdx";
+import { formatDate, getBlogPosts } from "app/blog/utils";
+import { baseUrl } from "app/sitemap";
+import { ChevronLeftIcon } from "@heroicons/react/24/outline";
+import Link from "next/link";
 
 export async function generateStaticParams() {
   const posts = getBlogPosts();
@@ -35,7 +35,7 @@ export function generateMetadata({ params }) {
     openGraph: {
       title,
       description,
-      type: 'article',
+      type: "article",
       publishedTime,
       url: `${baseUrl}/blog/${post.slug}`,
       images: [
@@ -45,7 +45,7 @@ export function generateMetadata({ params }) {
       ],
     },
     twitter: {
-      card: 'summary_large_image',
+      card: "summary_large_image",
       title,
       description,
       images: [ogImage],
@@ -68,8 +68,8 @@ export default function Blog({ params }) {
           suppressHydrationWarning
           dangerouslySetInnerHTML={{
             __html: JSON.stringify({
-              '@context': 'https://schema.org',
-              '@type': 'BlogPosting',
+              "@context": "https://schema.org",
+              "@type": "BlogPosting",
               headline: post.metadata.title,
               datePublished: post.metadata.publishedAt,
               dateModified: post.metadata.publishedAt,
@@ -79,8 +79,8 @@ export default function Blog({ params }) {
                 : `/og?title=${encodeURIComponent(post.metadata.title)}`,
               url: `${baseUrl}/blog/${post.slug}`,
               author: {
-                '@type': 'Person',
-                name: 'My Portfolio',
+                "@type": "Person",
+                name: "My Portfolio",
               },
             }),
           }}
@@ -99,7 +99,7 @@ export default function Blog({ params }) {
         </h1>
         <div className="flex justify-between items-center mt-1 text-sm">
           <p className="text-sm text-neutral-600 dark:text-neutral-400">
-            {formatDate(post.metadata.publishedAt)} |{' '}
+            {formatDate(post.metadata.publishedAt)} |{" "}
             {post.metadata.readingTime}
           </p>
         </div>
