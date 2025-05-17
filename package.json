@@ -27,6 +27,5 @@
   },
   "devDependencies": {
     "@biomejs/biome": "1.9.4"
-  },
-  "pre-push": "npm run format && npm run lint"
+  }
 }

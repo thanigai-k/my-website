@@ -9,7 +9,7 @@ type TableProps = {
   rows: string[][];
 };
 
-function Table({ headers, rows }: { table: TableProps }) {
+function Table({ headers, rows }: TableProps) {
   const headersList = headers.map((header) => <th key={header}>{header}</th>);
   const rowsList = rows.map((row, index) => (
     <tr key={row[index]} data-thx={row[index]}>
