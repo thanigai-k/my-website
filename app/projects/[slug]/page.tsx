@@ -2,7 +2,6 @@ import { notFound } from 'next/navigation';
 import { CustomMDX } from 'app/components/mdx';
 import { formatDate, getBlogPosts } from 'app/blog/utils';
 import { baseUrl } from 'app/sitemap';
-import { ChevronLeftIcon } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 
 export async function generateStaticParams() {
@@ -53,7 +52,7 @@ export function generateMetadata({ params }) {
   };
 }
 
-export default function Blog({ params }) {
+export default function Project({ params }) {
   const post = getBlogPosts().find((post) => post.slug === params.slug);
 
   if (!post) {
@@ -69,7 +68,7 @@ export default function Blog({ params }) {
           dangerouslySetInnerHTML={{
             __html: JSON.stringify({
               '@context': 'https://schema.org',
-              '@type': 'BlogPosting',
+              '@type': 'ProjectPosting',
               headline: post.metadata.title,
               datePublished: post.metadata.publishedAt,
               dateModified: post.metadata.publishedAt,
@@ -77,7 +76,7 @@ export default function Blog({ params }) {
               image: post.metadata.image
                 ? `${baseUrl}${post.metadata.image}`
                 : `/og?title=${encodeURIComponent(post.metadata.title)}`,
-              url: `${baseUrl}/blog/${post.slug}`,
+              url: `${baseUrl}/project/${post.slug}`,
               author: {
                 '@type': 'Person',
                 name: 'My Portfolio',
@@ -91,7 +90,7 @@ export default function Blog({ params }) {
             href="/blog"
             className="flex items-center gap-1 text-tertiary underline underline-offset-4"
           >
-            <span>Back to blog</span>
+            <span>Back to projects</span>
           </Link>
         </div>
         <h1 className="title font-semibold text-2xl tracking-tighter">

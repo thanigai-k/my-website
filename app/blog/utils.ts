@@ -1,90 +1,80 @@
-import fs from 'fs'
-import path from 'path'
+import path from 'node:path';
+import { getMDXData } from '../utils';
 
-type Metadata = {
-  title: string
-  publishedAt: string
-  summary: string
-  image?: string
-}
-
-function parseFrontmatter(fileContent: string) {
-  let frontmatterRegex = /---\s*([\s\S]*?)\s*---/
-  let match = frontmatterRegex.exec(fileContent)
-  let frontMatterBlock = match![1]
-  let content = fileContent.replace(frontmatterRegex, '').trim()
-  let frontMatterLines = frontMatterBlock.trim().split('\n')
-  let metadata: Partial<Metadata> = {}
-
-  frontMatterLines.forEach((line) => {
-    let [key, ...valueArr] = line.split(': ')
-    let value = valueArr.join(': ').trim()
-    value = value.replace(/^['"](.*)['"]$/, '$1') // Remove quotes
-    metadata[key.trim() as keyof Metadata] = value
-  })
-
-  return { metadata: metadata as Metadata, content }
-}
-
-function getMDXFiles(dir) {
-  return fs.readdirSync(dir).filter((file) => path.extname(file) === '.mdx')
-}
-
-function readMDXFile(filePath) {
-  let rawContent = fs.readFileSync(filePath, 'utf-8')
-  return parseFrontmatter(rawContent)
-}
-
-function getMDXData(dir) {
-  let mdxFiles = getMDXFiles(dir)
-  return mdxFiles.map((file) => {
-    let { metadata, content } = readMDXFile(path.join(dir, file))
-    let slug = path.basename(file, path.extname(file))
-
-    return {
-      metadata,
-      slug,
-      content,
-    }
-  })
-}
-
+// Get all blog posts
 export function getBlogPosts() {
-  return getMDXData(path.join(process.cwd(), 'app', 'blog', 'posts'))
+  return getMDXData(path.join(process.cwd(), 'app', 'blog', 'posts'));
 }
 
 export function formatDate(date: string, includeRelative = false) {
-  let currentDate = new Date()
-  if (!date.includes('T')) {
-    date = `${date}T00:00:00`
-  }
-  let targetDate = new Date(date)
+  const currentDate = new Date();
 
-  let yearsAgo = currentDate.getFullYear() - targetDate.getFullYear()
-  let monthsAgo = currentDate.getMonth() - targetDate.getMonth()
-  let daysAgo = currentDate.getDate() - targetDate.getDate()
+  const normalisedDate = date.includes('T') ? date : `${date}T00:00:00`;
 
-  let formattedDate = ''
+  const targetDate = new Date(normalisedDate);
+
+  const yearsAgo = currentDate.getFullYear() - targetDate.getFullYear();
+  const monthsAgo = currentDate.getMonth() - targetDate.getMonth();
+  const daysAgo = currentDate.getDate() - targetDate.getDate();
+
+  let formattedDate = '';
 
   if (yearsAgo > 0) {
-    formattedDate = `${yearsAgo}y ago`
+    formattedDate = `${yearsAgo}y ago`;
   } else if (monthsAgo > 0) {
-    formattedDate = `${monthsAgo}mo ago`
+    formattedDate = `${monthsAgo}mo ago`;
   } else if (daysAgo > 0) {
-    formattedDate = `${daysAgo}d ago`
+    formattedDate = `${daysAgo}d ago`;
   } else {
-    formattedDate = 'Today'
+    formattedDate = 'Today';
   }
 
-  let fullDate = targetDate.toLocaleString('en-us', {
+  const fullDate = targetDate.toLocaleString('en-us', {
     month: 'long',
     day: 'numeric',
     year: 'numeric',
-  })
+  });
 
   if (!includeRelative) {
-    return fullDate
+    return fullDate;
   }
 
-  return `${fullDate} (${formattedDate})`
+  return `${fullDate} (${formattedDate})`;
+}
+
+/**
+ * Get posts by filter
+ *
+ * */
+export function getBlogPostByFilter({
+  type = 'desc',
+  limit = 5,
+}: {
+  /**
+   * Sort type
+   *
+   * @default "desc"
+   * */
+  type?: 'asc' | 'desc';
+  /**
+   * Limit number of posts
+   *
+   * @default 5
+   * */
+  limit?: number;
+}) {
+  const posts = getBlogPosts();
+
+  const sortedPosts = posts.sort((a, b) => {
+    const dateA = new Date(a.metadata.publishedAt).getTime();
+    const dateB = new Date(b.metadata.publishedAt).getTime();
+
+    return type === 'asc' ? dateA - dateB : dateB - dateA;
+  });
+
+  if (limit) {
+    return sortedPosts.slice(0, limit);
+  }
+
+  return sortedPosts;
 }
