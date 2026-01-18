@@ -18,8 +18,8 @@
     "enabled": true,
     "rules": {
       "recommended": true,
-      "suspicious": {
-        "noUnknownAtRules": "off"
+      "correctness": {
+        "all": true
       }
     },
     "domains": {
