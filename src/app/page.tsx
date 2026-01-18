@@ -3,7 +3,7 @@ import Image from "next/image";
 export default function Home() {
   return (
     <main className="py-10">
-      <div className="relative">
+      <div className="relative relative">
         <div
           className="absolute border-0 border-t border-neutral-800 border-b w-full h-full opacity-50 -z-1
         "
